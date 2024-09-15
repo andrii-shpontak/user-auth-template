@@ -1,19 +1,39 @@
+import { Button, TabNav } from '@radix-ui/themes';
+
+import { AuthService } from '../../core/auth/authService';
 import { Link } from '@tanstack/react-router';
+import { container } from 'tsyringe';
+import { filledRadixColors } from '../constants';
+import { useAuth } from '../../core/auth/useAuth';
 
 export function Header() {
+  const authState = useAuth();
+  const authService = container.resolve(AuthService);
+
+  const handleLogout = () => {
+    authService.logout();
+  };
+
   return (
-    <header className="bg-blue-500 text-white py-4 px-8">
-      <nav className="flex gap-4">
-        <Link to="/" className="[&.active]:font-bold">
+    <header style={filledRadixColors} className='py-4 px-8 flex justify-between'>
+      <TabNav.Root className='flex gap-4'>
+        <Link to='/' className='[&.active]:font-bold'>
           Home
         </Link>
-        <Link to="/about" className="[&.active]:font-bold">
+        <Link to='/about' className='[&.active]:font-bold'>
           About
         </Link>
-        <Link to="/login" className="[&.active]:font-bold">
-          Login
-        </Link>
-      </nav>
+        {!authState.isAuthenticated && (
+          <Link to='/login' className='[&.active]:font-bold'>
+            Login
+          </Link>
+        )}
+      </TabNav.Root>
+      {authState.isAuthenticated && (
+        <Button onClick={handleLogout} color='gray'>
+          Logout
+        </Button>
+      )}
     </header>
   );
 }

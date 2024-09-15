@@ -1,4 +1,6 @@
 import './index.css';
+import '@radix-ui/themes/styles.css';
+import 'reflect-metadata';
 
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 
