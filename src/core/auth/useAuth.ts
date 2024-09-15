@@ -12,6 +12,18 @@ export const useAuth = () => {
 
   const authService = container.resolve(AuthService);
 
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    const values = Object.fromEntries(new FormData(e.currentTarget));
+    e.preventDefault();
+    if (values.email && values.password) {
+      authService.login(JSON.stringify(values));
+    }
+  };
+
+  const handleLogout = () => {
+    authService.logout();
+  };
+
   useEffect(() => {
     const subscription = authService.getAuthState().subscribe(state => {
       setAuthState(state);
@@ -22,5 +34,5 @@ export const useAuth = () => {
     };
   }, [authService]);
 
-  return authState;
+  return { authState, handleLogin, handleLogout };
 };

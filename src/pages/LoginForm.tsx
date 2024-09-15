@@ -1,52 +1,50 @@
-import React, { useState } from 'react';
+import * as Form from '@radix-ui/react-form';
 
-import { AuthService } from '../core/auth/authService';
-import { Button } from '@radix-ui/themes';
+import { Button, Heading, TextField } from '@radix-ui/themes';
+
+import { AbsoluteRoutes } from '../shared/enums';
 import { Navigate } from '@tanstack/react-router';
-import { container } from 'tsyringe';
 import { useAuth } from '../core/auth/useAuth';
 
 export const LoginForm = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const authState = useAuth();
-  const authService = container.resolve(AuthService);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (username && password) {
-      authService.login('mock-token');
-    }
-  };
+  const { authState, handleLogin } = useAuth();
 
   if (authState.isAuthenticated) {
-    return <Navigate to='/about' />;
+    return <Navigate to={AbsoluteRoutes.About} />;
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className='flex flex-col gap-4 max-w-md mx-auto mt-10 p-4 border border-gray-300 rounded'>
-      <h1 className='text-xl font-bold text-center'>Login</h1>
+    <Form.Root onSubmit={handleLogin} className='flex flex-col gap-4 max-w-md mx-auto mt-10 p-4 border rounded'>
+      <Heading as='h2' className='text-xl font-bold text-center'>
+        Login
+      </Heading>
 
-      <input
-        type='text'
-        value={username}
-        onChange={e => setUsername(e.target.value)}
-        placeholder='Username'
-        className='border p-2 rounded'
-      />
+      <Form.Field name='email' className='flex flex-col'>
+        <Form.Label>Email</Form.Label>
+        <Form.Control asChild>
+          <TextField.Root type='email' required />
+        </Form.Control>
+        <Form.Message className='text-red-500' match='valueMissing'>
+          Please enter your email
+        </Form.Message>
+        <Form.Message className='text-red-500' match='typeMismatch'>
+          Please provide a valid email
+        </Form.Message>
+      </Form.Field>
 
-      <input
-        type='password'
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-        placeholder='Password'
-        className='border p-2 rounded'
-      />
+      <Form.Field name='password' className='flex flex-col'>
+        <Form.Label>Password</Form.Label>
+        <Form.Control asChild>
+          <TextField.Root type='password' required />
+        </Form.Control>
+        <Form.Message className='text-red-500' match='valueMissing'>
+          Please enter your password
+        </Form.Message>
+      </Form.Field>
 
-      <Button type='submit'>Login</Button>
-    </form>
+      <Form.Submit asChild>
+        <Button>Login</Button>
+      </Form.Submit>
+    </Form.Root>
   );
 };

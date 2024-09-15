@@ -1,21 +1,14 @@
 import { Button, TabNav } from '@radix-ui/themes';
 
-import { AuthService } from '../../core/auth/authService';
 import { Link } from '@tanstack/react-router';
-import { container } from 'tsyringe';
 import { filledRadixColors } from '../constants';
 import { useAuth } from '../../core/auth/useAuth';
 
 export function Header() {
-  const authState = useAuth();
-  const authService = container.resolve(AuthService);
-
-  const handleLogout = () => {
-    authService.logout();
-  };
+  const { authState, handleLogout } = useAuth();
 
   return (
-    <header style={filledRadixColors} className='py-4 px-8 flex justify-between'>
+    <header style={filledRadixColors} className='py-2 px-8 h-12 flex justify-between items-center'>
       <TabNav.Root className='flex gap-4'>
         <Link to='/' className='[&.active]:font-bold'>
           Home
@@ -30,7 +23,7 @@ export function Header() {
         )}
       </TabNav.Root>
       {authState.isAuthenticated && (
-        <Button onClick={handleLogout} color='gray'>
+        <Button onClick={handleLogout} color='red'>
           Logout
         </Button>
       )}
