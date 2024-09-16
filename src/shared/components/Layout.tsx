@@ -1,18 +1,25 @@
 import { Box, Theme } from '@radix-ui/themes';
 
 import { Header } from './Header';
-import { ReactNode } from 'react';
+import type { IProtectedRouteProps } from '../types';
+import Loader from './Loader';
+import React from 'react';
 import { layoutRadixColors } from '../constants';
+import { useAuth } from '../../core/auth/useAuth';
 
-export function Layout({ children }: { children: ReactNode }) {
+export const Layout: React.FC<IProtectedRouteProps> = ({ children }) => {
+  const { isLoading } = useAuth();
+
   return (
-    <Theme accentColor='cyan'>
-      <Box className='min-h-screen '>
+    <Theme accentColor='yellow'>
+      <Box className='min-h-screen'>
         <Header />
-        <main style={layoutRadixColors} className='flex flex-col items-center justify-center py-6 px-4'>
-          {children}
+        <main
+          style={layoutRadixColors}
+          className='flex flex-col items-center justify-center py-6 px-4 h-[calc(100vh-3rem)]'>
+          {isLoading ? <Loader /> : children}
         </main>
       </Box>
     </Theme>
   );
-}
+};

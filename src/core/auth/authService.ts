@@ -9,17 +9,24 @@ export class AuthService {
     isAuthenticated: false,
     token: null,
   });
+  private loadingState = new BehaviorSubject<boolean>(false);
 
   getAuthState(): Observable<IAuthState> {
     return this.authState.asObservable();
   }
 
+  getLoadingState(): Observable<boolean> {
+    return this.loadingState.asObservable();
+  }
+
   login = async (credentials: string): Promise<void> => {
     // mock API
+    this.loadingState.next(true);
     return new Promise(resolve => {
       setTimeout(() => {
         const token = credentials;
         this.authState.next({ isAuthenticated: true, token });
+        this.loadingState.next(false);
         resolve();
       }, 1000);
     });
