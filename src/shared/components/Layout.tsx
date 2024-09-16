@@ -17,7 +17,9 @@ export const Layout: React.FC<IProtectedRouteProps> = ({ children }) => {
         <main
           style={layoutRadixColors}
           className='flex flex-col items-center justify-center py-6 px-4 h-[calc(100vh-3rem)]'>
-          {isLoading ? <Loader /> : children}
+          {/* {isLoading ? */}
+          <Loader />
+          {/* : children} */}
         </main>
       </Box>
     </Theme>
