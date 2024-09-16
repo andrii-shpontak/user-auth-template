@@ -14,13 +14,18 @@ export class AuthService {
     return this.authState.asObservable();
   }
 
-  login(token: string) {
-    console.log('Logging in with token:', token);
-    this.authState.next({ isAuthenticated: true, token });
-  }
+  login = async (credentials: string): Promise<void> => {
+    // mock API
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const token = credentials;
+        this.authState.next({ isAuthenticated: true, token });
+        resolve();
+      }, 1000);
+    });
+  };
 
   logout() {
-    console.log('Logging out');
     this.authState.next({ isAuthenticated: false, token: null });
   }
 }

@@ -1,3 +1,5 @@
+import { Heading } from '@radix-ui/themes';
+
 export default function Main() {
-  return <div>Hello world</div>;
+  return <Heading>Home page</Heading>;
 }

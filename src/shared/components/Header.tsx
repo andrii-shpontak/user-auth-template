@@ -16,13 +16,13 @@ export function Header() {
         <Link to='/about' className='[&.active]:font-bold'>
           About
         </Link>
-        {!authState.isAuthenticated && (
+        {!authState?.isAuthenticated && (
           <Link to='/login' className='[&.active]:font-bold'>
             Login
           </Link>
         )}
       </TabNav.Root>
-      {authState.isAuthenticated && (
+      {authState?.isAuthenticated && (
         <Button onClick={handleLogout} color='red'>
           Logout
         </Button>

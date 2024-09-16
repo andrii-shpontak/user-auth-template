@@ -2,15 +2,13 @@ import * as Form from '@radix-ui/react-form';
 
 import { Button, Heading, TextField } from '@radix-ui/themes';
 
-import { AbsoluteRoutes } from '../shared/enums';
-import { Navigate } from '@tanstack/react-router';
 import { useAuth } from '../core/auth/useAuth';
 
 export const LoginForm = () => {
   const { authState, handleLogin } = useAuth();
 
-  if (authState.isAuthenticated) {
-    return <Navigate to={AbsoluteRoutes.About} />;
+  if (authState?.isAuthenticated) {
+    return <h2>You are already logged in</h2>;
   }
 
   return (

@@ -3,20 +3,22 @@ import { useEffect, useState } from 'react';
 import { AuthService } from './authService';
 import type { IAuthState } from '../../shared/types';
 import { container } from 'tsyringe';
+import { useNavigate } from '@tanstack/react-router';
 
 export const useAuth = () => {
-  const [authState, setAuthState] = useState<IAuthState>({
-    isAuthenticated: false,
-    token: null,
-  });
+  const [authState, setAuthState] = useState<IAuthState | undefined>();
+  const navigate = useNavigate();
 
   const authService = container.resolve(AuthService);
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
-    const values = Object.fromEntries(new FormData(e.currentTarget));
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const values = Object.fromEntries(new FormData(e.currentTarget));
+
     if (values.email && values.password) {
-      authService.login(JSON.stringify(values));
+      await authService.login(JSON.stringify(values));
+      navigate({ to: '/about' });
     }
   };
 
@@ -32,7 +34,7 @@ export const useAuth = () => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [authService]);
+  }, []);
 
   return { authState, handleLogin, handleLogout };
 };
